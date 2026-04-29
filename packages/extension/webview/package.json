@@ -1,0 +1,26 @@
+{
+  "name": "exray-webview",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev":     "vite",
+    "build":   "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react":                      "^18.2.0",
+    "react-dom":                  "^18.2.0",
+    "@tanstack/react-virtual":    "^3.1.3",
+    "zustand":                    "^4.5.0",
+    "@radix-ui/react-collapsible":"^1.0.3",
+    "lucide-react":               "^0.323.0"
+  },
+  "devDependencies": {
+    "vite":                 "^5.1.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript":           "^5.3.0",
+    "@types/react":         "^18.2.0",
+    "@types/react-dom":     "^18.2.0"
+  }
+}
