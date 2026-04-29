@@ -29,15 +29,30 @@ func (e *Emitter) Emit(eventType EventType, stage StageType, payload map[string]
 	seq := e.seq.Add(1)
 
 	event := Event{
-		Id: id,
-		Type: eventType,
-		Stage: stage,
+		Id:        id,
+		Type:      eventType,
+		Stage:     stage,
 		Timestamp: time.Now().UnixMilli(),
-		Seq: seq,
-		Payload: payload,
+		Seq:       seq,
+		Payload:   payload,
 	}
 
 	data, err := json.Marshal(event)
 	if err != nil {
 		return fmt.Errorf("emitter: Falha ao serializar evento: %w", err)
+	}
+
+	e.mu.Lock()
+	defer e.mu.Unlock()
+
+	if _, err := e.w.Write(data); err != nil {
+		return fmt.Errorf("emitter: Falha ao escrever evento: %w", err)
+	}
+	if err := e.w.WriteByte('\n'); err != nil {
+		return fmt.Errorf("emitter: Falha ao escrever nova linha: %w", err)
+	}
+	if err := e.w.Flush(); err != nil {
+		return fmt.Errorf("emitter: Falha ao flushar buffer: %w", err)
+	}
+	return nil
 }
