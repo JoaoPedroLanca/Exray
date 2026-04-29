@@ -1,0 +1,72 @@
+{
+  "name": "exray",
+  "displayName": "Exray",
+  "description": "Real-time build pipeline monitor — observabilidade local no VS Code",
+  "publisher": "seu-publisher",
+  "version": "0.0.1",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": ["onCommand:exray.run"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "exray.run",  "title": "Exray: Run"  },
+      { "command": "exray.stop", "title": "Exray: Stop" }
+    ],
+    "configuration": {
+      "title": "Exray",
+      "properties": {
+        "exray.stages": {
+          "type": "array",
+          "markdownDescription": "Lista de estágios de build a executar em sequência.\n\nCada item define `name`, `bin`, `args` e `timeout` (segundos, 0 = sem timeout).\n\nExemplo:\n```json\n[\n  { \"name\": \"build\", \"bin\": \"go\", \"args\": [\"build\", \"./...\"], \"timeout\": 60 },\n  { \"name\": \"run\",   \"bin\": \"go\", \"args\": [\"run\", \"./...\"],   \"timeout\": 0 },\n  { \"name\": \"test\",  \"bin\": \"go\", \"args\": [\"test\", \"./...\"],  \"timeout\": 120 }\n]\n```",
+          "items": {
+            "type": "object",
+            "required": ["name", "bin", "args"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "enum": ["build", "run", "test"],
+                "description": "Nome do estágio no pipeline"
+              },
+              "bin": {
+                "type": "string",
+                "description": "Binário a executar (ex: go, npm, dotnet, cargo)"
+              },
+              "args": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Argumentos do binário como array"
+              },
+              "timeout": {
+                "type": "number",
+                "default": 0,
+                "description": "Timeout em segundos. 0 = sem timeout."
+              }
+            }
+          },
+          "default": [
+            { "name": "build", "bin": "go",     "args": ["build", "./..."],   "timeout": 60  },
+            { "name": "run",   "bin": "npm",    "args": ["run", "dev"],       "timeout": 0   },
+            { "name": "test",  "bin": "dotnet", "args": ["test"],             "timeout": 120 }
+          ]
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "node esbuild.config.mjs",
+    "watch":   "node esbuild.config.mjs --watch",
+    "package": "vsce package",
+    "lint":    "eslint src/ --ext .ts"
+  },
+  "devDependencies": {
+    "@types/vscode":                    "^1.85.0",
+    "@types/node":                      "^20.0.0",
+    "typescript":                       "^5.3.0",
+    "esbuild":                          "^0.20.0",
+    "eslint":                           "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser":        "^6.19.0",
+    "@vscode/vsce":                     "^2.23.0"
+  }
+}
