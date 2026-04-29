@@ -31,3 +31,31 @@ go.work.sum
 # .idea/
 .vscode/
 .github/agents
+
+# Node
+node_modules/
+dist/
+out/
+
+# VS Code Extension
+*.vsix
+.vscode/settings.json
+
+# Go binaries
+packages/agent/bin/
+packages/extension/bin/
+*.exe
+*.test
+
+# Build artifacts
+packages/extension/dist/
+packages/webview/dist/
+
+# Environment
+.env
+.env.*
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
